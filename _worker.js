@@ -381,10 +381,6 @@ async function handleAPI(request, env, path) {
 
   // ---- Init DB (first-time setup) ----
   if (path === '/api/init' && method === 'POST') {
-    // Check if admin exists
-    const existing = await db.prepare('SELECT id FROM users WHERE username = ?').bind('admin').first();
-    if (existing) return json({ message: 'Already initialized' });
-
     // Create tables
     await db.exec(`
       CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT NOT NULL UNIQUE, password_hash TEXT NOT NULL, role TEXT NOT NULL DEFAULT 'admin', created_at TEXT NOT NULL DEFAULT (datetime('now')), updated_at TEXT NOT NULL DEFAULT (datetime('now')));
@@ -394,6 +390,9 @@ async function handleAPI(request, env, path) {
       CREATE TABLE IF NOT EXISTS pages (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL, slug TEXT NOT NULL UNIQUE, body TEXT DEFAULT '', type TEXT DEFAULT 'page', status TEXT DEFAULT 'published', created_at TEXT NOT NULL DEFAULT (datetime('now')), updated_at TEXT NOT NULL DEFAULT (datetime('now')));
       CREATE TABLE IF NOT EXISTS settings (key TEXT PRIMARY KEY, value TEXT DEFAULT '');
     `);
+    // Check if admin exists
+    const existing = await db.prepare('SELECT id FROM users WHERE username = ?').bind('admin').first();
+    if (existing) return json({ message: 'Already initialized' });
 
     // Insert default admin
     const hash = await hashPassword('123456');
