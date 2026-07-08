@@ -437,7 +437,11 @@ export default {
 
     // API routes
     if (path.startsWith('/api/')) {
-      return handleAPI(request, env, path);
+      try {
+        return await handleAPI(request, env, path);
+      } catch (e) {
+        return json({ error: 'Internal error', detail: e.message }, 500);
+      }
     }
 
     // Admin panel
