@@ -1,0 +1,13 @@
+{
+  "name": "cf-store",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler pages dev . --d1 db=store-db --kv kv --r2 r2",
+    "deploy": "wrangler pages deploy .",
+    "init-db": "wrangler d1 execute store-db --file=./schema.sql"
+  },
+  "devDependencies": {
+    "wrangler": "^3.0.0"
+  }
+}

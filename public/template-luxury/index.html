@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Luxury Brand</title>
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- Header -->
+<header class="header" id="header">
+  <div class="container header-inner">
+    <button class="menu-toggle" id="menuToggle">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="nav" id="nav">
+      <a href="#home" data-i18n="nav_home">HOME</a>
+      <a href="#collection" data-i18n="nav_products">COLLECTION</a>
+      <a href="#about" data-i18n="nav_about">MAISON</a>
+      <a href="#contact" data-i18n="nav_contact">CONTACT</a>
+    </nav>
+    <a href="/" class="logo">
+      <span class="logo-text" data-i18n="site_name">MAISON</span>
+      <span class="logo-sub">PARIS</span>
+    </a>
+    <div class="header-actions">
+      <select id="langSelect" class="lang-select" title="Language">
+        <option value="en">EN</option>
+        <option value="zh">中文</option>
+        <option value="ja">日本語</option>
+        <option value="ko">한국어</option>
+        <option value="fr">FR</option>
+        <option value="de">DE</option>
+        <option value="es">ES</option>
+        <option value="pt">PT</option>
+        <option value="ar">العربية</option>
+        <option value="ru">RU</option>
+      </select>
+      <button class="theme-toggle" id="themeToggle" title="Toggle theme">
+        <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+      <button class="cart-btn" id="cartBtn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <span class="cart-count" id="cartCount">0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Hero -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="container hero-content">
+    <span class="hero-label" data-i18n="hero_badge">AUTUMN / WINTER 2025</span>
+    <h1 data-i18n="hero_title">Timeless<br>Elegance</h1>
+    <p data-i18n="hero_desc">Discover our latest collection — where craftsmanship meets contemporary design.</p>
+    <a href="#collection" class="btn" data-i18n="hero_cta">EXPLORE COLLECTION</a>
+  </div>
+  <div class="hero-scroll">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+  </div>
+</section>
+
+<!-- Marquee -->
+<div class="marquee">
+  <div class="marquee-inner">
+    <span>FREE WORLDWIDE SHIPPING</span>
+    <span>✦</span>
+    <span>HANDCRAFTED WITH LOVE</span>
+    <span>✦</span>
+    <span>SUSTAINABLE MATERIALS</span>
+    <span>✦</span>
+    <span>30-DAY RETURNS</span>
+    <span>✦</span>
+    <span>FREE WORLDWIDE SHIPPING</span>
+    <span>✦</span>
+    <span>HANDCRAFTED WITH LOVE</span>
+    <span>✦</span>
+  </div>
+</div>
+
+<!-- Products -->
+<section class="section" id="collection">
+  <div class="container">
+    <div class="section-label">
+      <span class="label-line"></span>
+      <span class="label-text" data-i18n="products_title">THE COLLECTION</span>
+      <span class="label-line"></span>
+    </div>
+    <p class="section-subtitle" data-i18n="products_desc">Each piece tells a story of artistry and refinement</p>
+    <div class="category-filter" id="categoryFilter">
+      <button class="filter-btn active" data-category="all" data-i18n="filter_all">All</button>
+    </div>
+    <div class="products-grid" id="productsGrid">
+      <div class="loading"><div class="spinner"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- About -->
+<section class="section section-dark" id="about">
+  <div class="container">
+    <div class="about-layout">
+      <div class="about-left">
+        <span class="section-label-sm" data-i18n="about_title">OUR MAISON</span>
+        <h2 data-i18n="about_title">The Art of<br>Living Beautifully</h2>
+      </div>
+      <div class="about-right">
+        <p data-i18n="about_desc">Founded with a vision to redefine modern luxury, our maison brings together the finest materials and artisanal techniques. Every creation is a testament to our commitment to excellence.</p>
+        <div class="stats">
+          <div class="stat">
+            <span class="stat-num">500+</span>
+            <span class="stat-label" data-i18n="feature1_title">Curated Pieces</span>
+          </div>
+          <div class="stat">
+            <span class="stat-num">50+</span>
+            <span class="stat-label" data-i18n="feature2_title">Countries</span>
+          </div>
+          <div class="stat">
+            <span class="stat-num">10k+</span>
+            <span class="stat-label" data-i18n="feature3_title">Happy Clients</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact -->
+<section class="section" id="contact">
+  <div class="container">
+    <div class="section-label">
+      <span class="label-line"></span>
+      <span class="label-text" data-i18n="contact_title">GET IN TOUCH</span>
+      <span class="label-line"></span>
+    </div>
+    <p class="section-subtitle" data-i18n="contact_desc">We'd be delighted to hear from you</p>
+    <form class="contact-form" id="contactForm">
+      <div class="form-row">
+        <div class="form-group">
+          <label data-i18n="form_name">Name</label>
+          <input type="text" name="name" required>
+        </div>
+        <div class="form-group">
+          <label data-i18n="form_email">Email</label>
+          <input type="email" name="email" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label data-i18n="form_message">Message</label>
+        <textarea name="message" rows="5" required></textarea>
+      </div>
+      <button type="submit" class="btn" data-i18n="form_submit">SEND MESSAGE</button>
+    </form>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <span class="logo-text">MAISON</span>
+        <span class="logo-sub">PARIS</span>
+      </div>
+      <div class="footer-links">
+        <a href="#home" data-i18n="nav_home">HOME</a>
+        <a href="#collection" data-i18n="nav_products">COLLECTION</a>
+        <a href="#about" data-i18n="nav_about">MAISON</a>
+        <a href="#contact" data-i18n="nav_contact">CONTACT</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 <span data-i18n="site_name">MAISON</span>. <span data-i18n="footer_rights">All rights reserved.</span></p>
+    </div>
+  </div>
+</footer>
+
+<!-- Cart Drawer -->
+<div class="cart-overlay" id="cartOverlay"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-header">
+    <h3 data-i18n="cart_title">Shopping Bag</h3>
+    <button class="cart-close" id="cartClose">&times;</button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-footer" id="cartFooter" style="display:none">
+    <div class="cart-total">
+      <span data-i18n="cart_total">Total</span>
+      <span id="cartTotal">$0.00</span>
+    </div>
+    <button class="btn btn-full" id="checkoutBtn" data-i18n="cart_checkout">PROCEED TO CHECKOUT</button>
+  </div>
+</div>
+
+<!-- Order Modal -->
+<div class="modal-overlay" id="orderModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 data-i18n="order_title">Complete Your Order</h3>
+      <button class="modal-close" onclick="document.getElementById('orderModal').classList.remove('active')">&times;</button>
+    </div>
+    <form id="orderForm">
+      <div class="form-group">
+        <label data-i18n="form_name">Full Name</label>
+        <input type="text" name="customer_name" required>
+      </div>
+      <div class="form-group">
+        <label data-i18n="form_email">Email</label>
+        <input type="email" name="customer_email">
+      </div>
+      <div class="form-group">
+        <label data-i18n="form_phone">Phone</label>
+        <input type="tel" name="customer_phone">
+      </div>
+      <div class="form-group">
+        <label data-i18n="form_address">Shipping Address</label>
+        <textarea name="shipping_address" rows="3" required></textarea>
+      </div>
+      <div class="form-group">
+        <label data-i18n="form_notes">Special Instructions</label>
+        <textarea name="notes" rows="2"></textarea>
+      </div>
+      <div class="order-summary" id="orderSummary"></div>
+      <button type="submit" class="btn btn-full" data-i18n="order_submit">PLACE ORDER</button>
+    </form>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
