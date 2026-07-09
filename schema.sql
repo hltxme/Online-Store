@@ -73,11 +73,32 @@ CREATE TABLE IF NOT EXISTS settings (
   value TEXT DEFAULT ''
 );
 
--- 插入默认管理员 (密码: 123456, 使用 SHA-256 hash)
--- 实际运行时由 worker 代码处理
+-- 默认设置
 INSERT OR IGNORE INTO settings (key, value) VALUES ('site_name', 'My Store');
 INSERT OR IGNORE INTO settings (key, value) VALUES ('site_description', 'Welcome to our store');
 INSERT OR IGNORE INTO settings (key, value) VALUES ('template', 'modern');
 INSERT OR IGNORE INTO settings (key, value) VALUES ('currency', 'USD');
 INSERT OR IGNORE INTO settings (key, value) VALUES ('contact_email', '');
 INSERT OR IGNORE INTO settings (key, value) VALUES ('social_links', '{}');
+
+-- Logo & Favicon
+INSERT OR IGNORE INTO settings (key, value) VALUES ('site_logo', '');
+INSERT OR IGNORE INTO settings (key, value) VALUES ('site_favicon', '');
+
+-- Alipay Face-to-Face Payment
+INSERT OR IGNORE INTO settings (key, value) VALUES ('alipay_enabled', '0');
+INSERT OR IGNORE INTO settings (key, value) VALUES ('alipay_app_id', '');
+INSERT OR IGNORE INTO settings (key, value) VALUES ('alipay_private_key', '');
+INSERT OR IGNORE INTO settings (key, value) VALUES ('alipay_public_key', '');
+INSERT OR IGNORE INTO settings (key, value) VALUES ('alipay_notify_url', '');
+
+-- Telegram Notification
+INSERT OR IGNORE INTO settings (key, value) VALUES ('notify_tg_enabled', '0');
+INSERT OR IGNORE INTO settings (key, value) VALUES ('notify_tg_bot_token', '');
+INSERT OR IGNORE INTO settings (key, value) VALUES ('notify_tg_chat_id', '');
+
+-- Email Notification (Microsoft Graph API)
+INSERT OR IGNORE INTO settings (key, value) VALUES ('notify_email_enabled', '0');
+INSERT OR IGNORE INTO settings (key, value) VALUES ('notify_ms_graph_token', '');
+INSERT OR IGNORE INTO settings (key, value) VALUES ('notify_email_from', '');
+INSERT OR IGNORE INTO settings (key, value) VALUES ('notify_email_to', '');
