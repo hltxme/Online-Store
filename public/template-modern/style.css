@@ -414,3 +414,16 @@ body {
 .payment-icon { font-size: 4rem; margin-bottom: 16px; }
 .payment-success-box p { color: var(--text-secondary); margin-bottom: 8px; }
 .badge-pending { background: #1e3a5f20; color: #3b82f6; padding: 4px 12px; border-radius: 50px; font-size: 0.8rem; font-weight: 600; }
+
+/* ---- Custom Page ---- */
+.page-article { max-width: 800px; margin: 0 auto; }
+.page-article-title { font-size: 2rem; font-weight: 700; margin-bottom: 24px; line-height: 1.3; }
+.page-article-body { color: var(--text-secondary); line-height: 1.9; font-size: 1rem; }
+.page-article-body h1, .page-article-body h2, .page-article-body h3 { color: var(--text); margin-top: 24px; margin-bottom: 12px; }
+.page-article-body p { margin-bottom: 16px; }
+.page-article-body img { max-width: 100%; border-radius: var(--radius-sm); margin: 16px 0; }
+.page-article-body a { color: var(--primary); }
+.page-article-body ul, .page-article-body ol { padding-left: 24px; margin-bottom: 16px; }
+.page-article-body li { margin-bottom: 8px; }
+#customPagesNav a { text-decoration: none; color: var(--text-secondary); font-weight: 500; font-size: 0.95rem; transition: var(--transition); position: relative; }
+#customPagesNav a:hover { color: var(--primary); }
