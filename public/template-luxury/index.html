@@ -20,7 +20,7 @@
       <a href="#about" data-i18n="nav_about">MAISON</a>
       <a href="#contact" data-i18n="nav_contact">CONTACT</a>
     </nav>
-    <a href="/" class="logo">
+    <a href="/" class="logo" id="siteLogo">
       <span class="logo-text" data-i18n="site_name">MAISON</span>
       <span class="logo-sub">PARIS</span>
     </a>
@@ -49,113 +49,183 @@
   </div>
 </header>
 
-<!-- Hero -->
-<section class="hero" id="home">
-  <div class="hero-bg"></div>
-  <div class="container hero-content">
-    <span class="hero-label" data-i18n="hero_badge">AUTUMN / WINTER 2025</span>
-    <h1 data-i18n="hero_title">Timeless<br>Elegance</h1>
-    <p data-i18n="hero_desc">Discover our latest collection — where craftsmanship meets contemporary design.</p>
-    <a href="#collection" class="btn" data-i18n="hero_cta">EXPLORE COLLECTION</a>
-  </div>
-  <div class="hero-scroll">
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
-  </div>
-</section>
+<!-- ===== Home Page ===== -->
+<div id="view-home">
+  <!-- Hero -->
+  <section class="hero" id="home">
+    <div class="hero-bg"></div>
+    <div class="container hero-content">
+      <span class="hero-label" data-i18n="hero_badge">AUTUMN / WINTER 2025</span>
+      <h1 data-i18n="hero_title">Timeless<br>Elegance</h1>
+      <p data-i18n="hero_desc">Discover our latest collection — where craftsmanship meets contemporary design.</p>
+      <a href="#collection" class="btn" data-i18n="hero_cta">EXPLORE COLLECTION</a>
+    </div>
+    <div class="hero-scroll">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+    </div>
+  </section>
 
-<!-- Marquee -->
-<div class="marquee">
-  <div class="marquee-inner">
-    <span>FREE WORLDWIDE SHIPPING</span>
-    <span>✦</span>
-    <span>HANDCRAFTED WITH LOVE</span>
-    <span>✦</span>
-    <span>SUSTAINABLE MATERIALS</span>
-    <span>✦</span>
-    <span>30-DAY RETURNS</span>
-    <span>✦</span>
-    <span>FREE WORLDWIDE SHIPPING</span>
-    <span>✦</span>
-    <span>HANDCRAFTED WITH LOVE</span>
-    <span>✦</span>
+  <!-- Marquee -->
+  <div class="marquee">
+    <div class="marquee-inner">
+      <span>FREE WORLDWIDE SHIPPING</span>
+      <span>✦</span>
+      <span>HANDCRAFTED WITH LOVE</span>
+      <span>✦</span>
+      <span>SUSTAINABLE MATERIALS</span>
+      <span>✦</span>
+      <span>30-DAY RETURNS</span>
+      <span>✦</span>
+      <span>FREE WORLDWIDE SHIPPING</span>
+      <span>✦</span>
+      <span>HANDCRAFTED WITH LOVE</span>
+      <span>✦</span>
+    </div>
   </div>
+
+  <!-- Products -->
+  <section class="section" id="collection">
+    <div class="container">
+      <div class="section-label">
+        <span class="label-line"></span>
+        <span class="label-text" data-i18n="products_title">THE COLLECTION</span>
+        <span class="label-line"></span>
+      </div>
+      <p class="section-subtitle" data-i18n="products_desc">Each piece tells a story of artistry and refinement</p>
+      <div class="category-filter" id="categoryFilter">
+        <button class="filter-btn active" data-category="all" data-i18n="filter_all">All</button>
+      </div>
+      <div class="products-grid" id="productsGrid">
+        <div class="loading"><div class="spinner"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section class="section section-dark" id="about">
+    <div class="container">
+      <div class="about-layout">
+        <div class="about-left">
+          <span class="section-label-sm" data-i18n="about_title">OUR MAISON</span>
+          <h2 data-i18n="about_title">The Art of<br>Living Beautifully</h2>
+        </div>
+        <div class="about-right">
+          <p data-i18n="about_desc">Founded with a vision to redefine modern luxury, our maison brings together the finest materials and artisanal techniques. Every creation is a testament to our commitment to excellence.</p>
+          <div class="stats">
+            <div class="stat">
+              <span class="stat-num">500+</span>
+              <span class="stat-label" data-i18n="feature1_title">Curated Pieces</span>
+            </div>
+            <div class="stat">
+              <span class="stat-num">50+</span>
+              <span class="stat-label" data-i18n="feature2_title">Countries</span>
+            </div>
+            <div class="stat">
+              <span class="stat-num">10k+</span>
+              <span class="stat-label" data-i18n="feature3_title">Happy Clients</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="section" id="contact">
+    <div class="container">
+      <div class="section-label">
+        <span class="label-line"></span>
+        <span class="label-text" data-i18n="contact_title">GET IN TOUCH</span>
+        <span class="label-line"></span>
+      </div>
+      <p class="section-subtitle" data-i18n="contact_desc">We'd be delighted to hear from you</p>
+      <form class="contact-form" id="contactForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label data-i18n="form_name">Name</label>
+            <input type="text" name="name" required>
+          </div>
+          <div class="form-group">
+            <label data-i18n="form_email">Email</label>
+            <input type="email" name="email" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label data-i18n="form_message">Message</label>
+          <textarea name="message" rows="5" required></textarea>
+        </div>
+        <button type="submit" class="btn" data-i18n="form_submit">SEND MESSAGE</button>
+      </form>
+    </div>
+  </section>
 </div>
 
-<!-- Products -->
-<section class="section" id="collection">
-  <div class="container">
-    <div class="section-label">
-      <span class="label-line"></span>
-      <span class="label-text" data-i18n="products_title">THE COLLECTION</span>
-      <span class="label-line"></span>
+<!-- ===== Product Detail Page ===== -->
+<div id="view-product" style="display:none">
+  <section class="section" style="padding-top:120px">
+    <div class="container">
+      <div class="product-detail" id="productDetail">
+        <div class="loading"><div class="spinner"></div></div>
+      </div>
     </div>
-    <p class="section-subtitle" data-i18n="products_desc">Each piece tells a story of artistry and refinement</p>
-    <div class="category-filter" id="categoryFilter">
-      <button class="filter-btn active" data-category="all" data-i18n="filter_all">All</button>
-    </div>
-    <div class="products-grid" id="productsGrid">
-      <div class="loading"><div class="spinner"></div></div>
-    </div>
-  </div>
-</section>
+  </section>
+</div>
 
-<!-- About -->
-<section class="section section-dark" id="about">
-  <div class="container">
-    <div class="about-layout">
-      <div class="about-left">
-        <span class="section-label-sm" data-i18n="about_title">OUR MAISON</span>
-        <h2 data-i18n="about_title">The Art of<br>Living Beautifully</h2>
-      </div>
-      <div class="about-right">
-        <p data-i18n="about_desc">Founded with a vision to redefine modern luxury, our maison brings together the finest materials and artisanal techniques. Every creation is a testament to our commitment to excellence.</p>
-        <div class="stats">
-          <div class="stat">
-            <span class="stat-num">500+</span>
-            <span class="stat-label" data-i18n="feature1_title">Curated Pieces</span>
-          </div>
-          <div class="stat">
-            <span class="stat-num">50+</span>
-            <span class="stat-label" data-i18n="feature2_title">Countries</span>
-          </div>
-          <div class="stat">
-            <span class="stat-num">10k+</span>
-            <span class="stat-label" data-i18n="feature3_title">Happy Clients</span>
+<!-- ===== Checkout Page ===== -->
+<div id="view-checkout" style="display:none">
+  <section class="section" style="padding-top:120px">
+    <div class="container">
+      <div class="checkout-page">
+        <div class="section-label">
+          <span class="label-line"></span>
+          <span class="label-text" data-i18n="checkout_title">CHECKOUT</span>
+          <span class="label-line"></span>
+        </div>
+        <div class="checkout-grid">
+          <div class="checkout-items" id="checkoutItems"></div>
+          <div class="checkout-form-wrap">
+            <h3 data-i18n="order_title">Complete Your Order</h3>
+            <form id="checkoutForm">
+              <div class="form-group">
+                <label data-i18n="form_name">Full Name</label>
+                <input type="text" name="customer_name" required>
+              </div>
+              <div class="form-group">
+                <label data-i18n="form_email">Email</label>
+                <input type="email" name="customer_email">
+              </div>
+              <div class="form-group">
+                <label data-i18n="form_phone">Phone</label>
+                <input type="tel" name="customer_phone">
+              </div>
+              <div class="form-group">
+                <label data-i18n="form_address">Shipping Address</label>
+                <textarea name="shipping_address" rows="3" required></textarea>
+              </div>
+              <div class="form-group">
+                <label data-i18n="form_notes">Special Instructions</label>
+                <textarea name="notes" rows="2"></textarea>
+              </div>
+              <div class="checkout-summary" id="checkoutSummary"></div>
+              <button type="submit" class="btn btn-full" data-i18n="order_submit">PLACE ORDER</button>
+            </form>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
+</div>
 
-<!-- Contact -->
-<section class="section" id="contact">
-  <div class="container">
-    <div class="section-label">
-      <span class="label-line"></span>
-      <span class="label-text" data-i18n="contact_title">GET IN TOUCH</span>
-      <span class="label-line"></span>
+<!-- ===== Payment Page ===== -->
+<div id="view-payment" style="display:none">
+  <section class="section" style="padding-top:120px">
+    <div class="container">
+      <div class="payment-page" id="paymentPage">
+        <div class="loading"><div class="spinner"></div></div>
+      </div>
     </div>
-    <p class="section-subtitle" data-i18n="contact_desc">We'd be delighted to hear from you</p>
-    <form class="contact-form" id="contactForm">
-      <div class="form-row">
-        <div class="form-group">
-          <label data-i18n="form_name">Name</label>
-          <input type="text" name="name" required>
-        </div>
-        <div class="form-group">
-          <label data-i18n="form_email">Email</label>
-          <input type="email" name="email" required>
-        </div>
-      </div>
-      <div class="form-group">
-        <label data-i18n="form_message">Message</label>
-        <textarea name="message" rows="5" required></textarea>
-      </div>
-      <button type="submit" class="btn" data-i18n="form_submit">SEND MESSAGE</button>
-    </form>
-  </div>
-</section>
+  </section>
+</div>
 
 <!-- Footer -->
 <footer class="footer">
