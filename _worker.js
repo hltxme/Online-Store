@@ -68,10 +68,106 @@ async function authenticate(request) {
   return await verifyToken(auth.slice(7));
 }
 
-// --- Image Processing (WebP conversion) ---
-async function convertToWebP(arrayBuffer, contentType) {
-  // Store original; actual WebP conversion happens client-side or via CF Image Resizing
-  return arrayBuffer;
+// --- Notification Helpers ---
+async function sendTelegramNotification(botToken, chatId, message) {
+  if (!botToken || !chatId) return false;
+  try {
+    const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+    const resp = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ chat_id: chatId, text: message, parse_mode: 'HTML' })
+    });
+    return resp.ok;
+  } catch { return false; }
+}
+
+async function sendEmailNotification(graphToken, fromEmail, toEmail, subject, htmlBody) {
+  if (!graphToken || !fromEmail || !toEmail) return false;
+  try {
+    const url = 'https://graph.microsoft.com/v1.0/users/' + fromEmail + '/sendMail';
+    const resp = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${graphToken}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        message: {
+          subject: subject,
+          body: { contentType: 'HTML', content: htmlBody },
+          toRecipients: [{ emailAddress: { address: toEmail } }]
+        },
+        saveToSentItems: 'false'
+      })
+    });
+    return resp.ok;
+  } catch { return false; }
+}
+
+async function notifyNewOrder(db, order) {
+  try {
+    const { results } = await db.prepare("SELECT key, value FROM settings WHERE key IN ('notify_tg_enabled','notify_tg_bot_token','notify_tg_chat_id','notify_email_enabled','notify_ms_graph_token','notify_email_from','notify_email_to')").all();
+    const cfg = {};
+    results.forEach(r => cfg[r.key] = r.value);
+
+    const items = typeof order.items === 'string' ? JSON.parse(order.items) : order.items;
+    const itemLines = items.map(i => `${i.name} x${i.qty} - $${(i.price * i.qty).toFixed(2)}`).join('\n');
+
+    // Telegram notification
+    if (cfg.notify_tg_enabled === '1' && cfg.notify_tg_bot_token && cfg.notify_tg_chat_id) {
+      const msg = `🛒 <b>新订单通知</b>\n\n` +
+        `订单号: <b>${order.order_no}</b>\n` +
+        `客户: ${order.customer_name}\n` +
+        `邮箱: ${order.customer_email || '-'}\n` +
+        `电话: ${order.customer_phone || '-'}\n` +
+        `地址: ${order.shipping_address || '-'}\n\n` +
+        `商品:\n${itemLines}\n\n` +
+        `总计: <b>$${Number(order.total).toFixed(2)}</b>\n` +
+        `备注: ${order.notes || '-'}`;
+      await sendTelegramNotification(cfg.notify_tg_bot_token, cfg.notify_tg_chat_id, msg);
+    }
+
+    // Email notification
+    if (cfg.notify_email_enabled === '1' && cfg.notify_ms_graph_token && cfg.notify_email_from && cfg.notify_email_to) {
+      const subject = `[新订单] ${order.order_no} - ${order.customer_name}`;
+      const htmlBody = `
+        <h2>新订单通知</h2>
+        <table style="border-collapse:collapse;width:100%;max-width:600px">
+          <tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold">订单号</td><td style="padding:8px;border:1px solid #ddd">${order.order_no}</td></tr>
+          <tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold">客户</td><td style="padding:8px;border:1px solid #ddd">${order.customer_name}</td></tr>
+          <tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold">邮箱</td><td style="padding:8px;border:1px solid #ddd">${order.customer_email || '-'}</td></tr>
+          <tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold">电话</td><td style="padding:8px;border:1px solid #ddd">${order.customer_phone || '-'}</td></tr>
+          <tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold">地址</td><td style="padding:8px;border:1px solid #ddd">${order.shipping_address || '-'}</td></tr>
+          <tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold">商品</td><td style="padding:8px;border:1px solid #ddd"><pre style="margin:0">${itemLines}</pre></td></tr>
+          <tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold">总计</td><td style="padding:8px;border:1px solid #ddd"><b>$${Number(order.total).toFixed(2)}</b></td></tr>
+          <tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold">备注</td><td style="padding:8px;border:1px solid #ddd">${order.notes || '-'}</td></tr>
+        </table>`;
+      await sendEmailNotification(cfg.notify_ms_graph_token, cfg.notify_email_from, cfg.notify_email_to, subject, htmlBody);
+    }
+  } catch (e) {
+    console.error('Notification error:', e);
+  }
+}
+
+// --- Alipay Face-to-Face Payment Helper ---
+function generateAlipayQrCodeUrl(appId, privateKey, orderId, amount, subject) {
+  // In production, this would generate a real Alipay F2F payment QR code
+  // For now, return a mock structure that the frontend can display
+  const timestamp = new Date().toISOString().replace('T', ' ').substring(0, 19);
+  const bizContent = JSON.stringify({
+    out_trade_no: orderId,
+    total_amount: amount.toFixed(2),
+    subject: subject,
+    scene: 'bar_code'
+  });
+  return {
+    out_trade_no: orderId,
+    total_amount: amount.toFixed(2),
+    subject: subject,
+    qr_code: `https://qr.alipay.com/bax_${orderId}`, // Mock QR code URL
+    timestamp: timestamp
+  };
 }
 
 // --- API Router ---
@@ -222,7 +318,14 @@ async function handleAPI(request, env, path) {
       body.customer_phone || '', body.shipping_address || '',
       JSON.stringify(body.items || []), body.total || 0, 'pending', body.notes || ''
     ).run();
-    return json({ id: result.meta.last_row_id, order_no: orderNo }, 201);
+
+    const orderId = result.meta.last_row_id;
+    const order = { id: orderId, order_no: orderNo, ...body };
+
+    // Send notifications asynchronously
+    notifyNewOrder(db, { ...order, items: JSON.stringify(body.items || []) });
+
+    return json({ id: orderId, order_no: orderNo }, 201);
   }
 
   if (path.match(/^\/api\/orders\/\d+$/) && method === 'PUT') {
@@ -242,6 +345,75 @@ async function handleAPI(request, env, path) {
     const id = path.split('/').pop();
     await db.prepare('DELETE FROM orders WHERE id = ?').bind(id).run();
     return json({ success: true });
+  }
+
+  // ---- Payment: Alipay Face-to-Face ----
+  if (path === '/api/payment/alipay/create' && method === 'POST') {
+    const body = await request.json();
+    const { order_no, total, subject } = body;
+    if (!order_no || !total) return json({ error: 'Missing order_no or total' }, 400);
+
+    // Get Alipay settings
+    const { results } = await db.prepare("SELECT key, value FROM settings WHERE key IN ('alipay_app_id','alipay_private_key','alipay_enabled')").all();
+    const cfg = {};
+    results.forEach(r => cfg[r.key] = r.value);
+
+    if (cfg.alipay_enabled !== '1') {
+      return json({ error: 'Alipay payment is not enabled' }, 400);
+    }
+
+    const paymentData = generateAlipayQrCodeUrl(
+      cfg.alipay_app_id, cfg.alipay_private_key,
+      order_no, parseFloat(total), subject || 'Order Payment'
+    );
+
+    return json({ success: true, payment: paymentData });
+  }
+
+  if (path === '/api/payment/alipay/query' && method === 'GET') {
+    const url = new URL(request.url);
+    const orderNo = url.searchParams.get('order_no');
+    if (!orderNo) return json({ error: 'Missing order_no' }, 400);
+
+    // Mock query - in production, query Alipay API
+    const order = await db.prepare('SELECT * FROM orders WHERE order_no = ?').bind(orderNo).first();
+    if (!order) return json({ error: 'Order not found' }, 404);
+
+    return json({
+      order_no: orderNo,
+      trade_status: order.status === 'completed' ? 'TRADE_SUCCESS' : 'WAIT_BUYER_PAY',
+      total_amount: order.total.toFixed(2)
+    });
+  }
+
+  // ---- Test Notification ----
+  if (path === '/api/notifications/test' && method === 'POST') {
+    const auth = await authenticate(request);
+    if (!auth) return json({ error: 'Unauthorized' }, 401);
+
+    const { type } = await request.json(); // 'telegram' or 'email'
+    const { results } = await db.prepare("SELECT key, value FROM settings WHERE key IN ('notify_tg_bot_token','notify_tg_chat_id','notify_ms_graph_token','notify_email_from','notify_email_to')").all();
+    const cfg = {};
+    results.forEach(r => cfg[r.key] = r.value);
+
+    if (type === 'telegram') {
+      const ok = await sendTelegramNotification(
+        cfg.notify_tg_bot_token, cfg.notify_tg_chat_id,
+        '🧪 <b>测试通知</b>\n\n这是一条来自商城系统的测试消息。如果您收到此消息，说明 Telegram 通知已配置成功！'
+      );
+      return json({ success: ok, message: ok ? 'Telegram test sent' : 'Failed to send' });
+    }
+
+    if (type === 'email') {
+      const ok = await sendEmailNotification(
+        cfg.notify_ms_graph_token, cfg.notify_email_from, cfg.notify_email_to,
+        '[测试] 商城通知系统',
+        '<h2>测试通知</h2><p>这是一条来自商城系统的测试邮件。如果您收到此邮件，说明邮件通知已配置成功！</p>'
+      );
+      return json({ success: ok, message: ok ? 'Email test sent' : 'Failed to send' });
+    }
+
+    return json({ error: 'Invalid type' }, 400);
   }
 
   // ---- Pages / Content ----
@@ -314,7 +486,7 @@ async function handleAPI(request, env, path) {
     if (!file) return json({ error: 'No file' }, 400);
 
     const ext = file.name.split('.').pop().toLowerCase();
-    const allowedExts = ['jpg','jpeg','png','gif','webp','svg','bmp'];
+    const allowedExts = ['jpg','jpeg','png','gif','webp','svg','bmp','ico'];
     if (!allowedExts.includes(ext)) return json({ error: 'Invalid file type' }, 400);
 
     const arrayBuffer = await file.arrayBuffer();
@@ -323,19 +495,14 @@ async function handleAPI(request, env, path) {
     const key = `uploads/${timestamp}_${rand}.${ext}`;
     const webpKey = `uploads/${timestamp}_${rand}.webp`;
 
-    // Store original in R2
     await r2.put(key, arrayBuffer, {
       httpMetadata: { contentType: file.type || `image/${ext}` }
     });
 
-    // Also store as webp key (for browsers that support it)
-    // In production, use CF Image Resizing. Here we store original with both keys.
     await r2.put(webpKey, arrayBuffer, {
       httpMetadata: { contentType: 'image/webp' }
     });
 
-    // Generate a simple "thumbnail" placeholder in KV (base64 tiny)
-    // Real thumbnail generation would use CF Image Resizing
     const thumbKey = `thumb_${timestamp}_${rand}`;
     await kv.put(thumbKey, JSON.stringify({
       original: key,
@@ -343,7 +510,7 @@ async function handleAPI(request, env, path) {
       size: arrayBuffer.byteLength,
       name: file.name,
       uploadedAt: new Date().toISOString()
-    }), { expirationTtl: 86400 * 30 }); // 30 days
+    }), { expirationTtl: 86400 * 30 });
 
     const url = `/api/files/${webpKey}`;
     return json({ url, key: webpKey, thumbKey, originalKey: key, size: arrayBuffer.byteLength });
@@ -381,7 +548,6 @@ async function handleAPI(request, env, path) {
 
   // ---- Init DB (first-time setup) ----
   if (path === '/api/init' && method === 'POST') {
-    // Create tables
     await db.exec(`
       CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT NOT NULL UNIQUE, password_hash TEXT NOT NULL, role TEXT NOT NULL DEFAULT 'admin', created_at TEXT NOT NULL DEFAULT (datetime('now')), updated_at TEXT NOT NULL DEFAULT (datetime('now')));
       CREATE TABLE IF NOT EXISTS products (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, slug TEXT NOT NULL UNIQUE, description TEXT DEFAULT '', price REAL NOT NULL DEFAULT 0, compare_price REAL DEFAULT 0, images TEXT DEFAULT '[]', category TEXT DEFAULT '', stock INTEGER DEFAULT 0, status TEXT DEFAULT 'active', featured INTEGER DEFAULT 0, sort_order INTEGER DEFAULT 0, created_at TEXT NOT NULL DEFAULT (datetime('now')), updated_at TEXT NOT NULL DEFAULT (datetime('now')));
@@ -390,16 +556,32 @@ async function handleAPI(request, env, path) {
       CREATE TABLE IF NOT EXISTS pages (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL, slug TEXT NOT NULL UNIQUE, body TEXT DEFAULT '', type TEXT DEFAULT 'page', status TEXT DEFAULT 'published', created_at TEXT NOT NULL DEFAULT (datetime('now')), updated_at TEXT NOT NULL DEFAULT (datetime('now')));
       CREATE TABLE IF NOT EXISTS settings (key TEXT PRIMARY KEY, value TEXT DEFAULT '');
     `);
-    // Check if admin exists
     const existing = await db.prepare('SELECT id FROM users WHERE username = ?').bind('admin').first();
     if (existing) return json({ message: 'Already initialized' });
 
-    // Insert default admin
     const hash = await hashPassword('123456');
     await db.prepare('INSERT OR IGNORE INTO users (username, password_hash, role) VALUES (?, ?, ?)').bind('admin', hash, 'admin').run();
 
-    // Default settings
-    const defaults = { site_name: 'My Store', site_description: 'Welcome to our store', template: 'modern', currency: 'USD', contact_email: '', social_links: '{}' };
+    const defaults = {
+      site_name: 'My Store',
+      site_description: 'Welcome to our store',
+      template: 'modern',
+      currency: 'USD',
+      contact_email: '',
+      social_links: '{}',
+      site_logo: '',
+      site_favicon: '',
+      alipay_enabled: '0',
+      alipay_app_id: '',
+      alipay_private_key: '',
+      notify_tg_enabled: '0',
+      notify_tg_bot_token: '',
+      notify_tg_chat_id: '',
+      notify_email_enabled: '0',
+      notify_ms_graph_token: '',
+      notify_email_from: '',
+      notify_email_to: ''
+    };
     for (const [k, v] of Object.entries(defaults)) {
       await db.prepare('INSERT OR IGNORE INTO settings (key, value) VALUES (?, ?)').bind(k, v).run();
     }
@@ -412,8 +594,6 @@ async function handleAPI(request, env, path) {
 
 // --- Static File Serving ---
 async function handleStatic(request, env, path) {
-  // Try to serve from static assets (Pages handles this automatically)
-  // But we need to route to the right template
   return env.ASSETS.fetch(request);
 }
 
@@ -461,7 +641,6 @@ export default {
         return env.ASSETS.fetch(new Request(new URL(`/public${templatePath}/index.html`, request.url)));
       }
 
-      // Try direct path first, then template path
       let response = await env.ASSETS.fetch(request);
       if (response.status === 404) {
         const newPath = `/public${templatePath}${path}`;
@@ -469,7 +648,6 @@ export default {
       }
       return response;
     } catch (e) {
-      // DB not ready yet, show init page
       return new Response(INIT_HTML, {
         headers: { 'Content-Type': 'text/html;charset=UTF-8' }
       });
@@ -477,7 +655,7 @@ export default {
   }
 };
 
-// --- Init Page (shown when DB is not set up) ---
+// --- Init Page ---
 const INIT_HTML = `<!DOCTYPE html>
 <html lang="en">
 <head>
