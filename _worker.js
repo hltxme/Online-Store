@@ -151,21 +151,16 @@ async function notifyNewOrder(db, order) {
 }
 
 // --- Alipay Face-to-Face Payment Helper ---
-function generateAlipayQrCodeUrl(appId, privateKey, orderId, amount, subject) {
+function generateAlipayQrCodeUrl(appId, privateKey, orderId, amount, subject, notifyUrl) {
   // In production, this would generate a real Alipay F2F payment QR code
   // For now, return a mock structure that the frontend can display
   const timestamp = new Date().toISOString().replace('T', ' ').substring(0, 19);
-  const bizContent = JSON.stringify({
-    out_trade_no: orderId,
-    total_amount: amount.toFixed(2),
-    subject: subject,
-    scene: 'bar_code'
-  });
   return {
     out_trade_no: orderId,
     total_amount: amount.toFixed(2),
     subject: subject,
     qr_code: `https://qr.alipay.com/bax_${orderId}`, // Mock QR code URL
+    notify_url: notifyUrl || '',
     timestamp: timestamp
   };
 }
@@ -354,7 +349,7 @@ async function handleAPI(request, env, path) {
     if (!order_no || !total) return json({ error: 'Missing order_no or total' }, 400);
 
     // Get Alipay settings
-    const { results } = await db.prepare("SELECT key, value FROM settings WHERE key IN ('alipay_app_id','alipay_private_key','alipay_enabled')").all();
+    const { results } = await db.prepare("SELECT key, value FROM settings WHERE key IN ('alipay_app_id','alipay_private_key','alipay_enabled','alipay_notify_url')").all();
     const cfg = {};
     results.forEach(r => cfg[r.key] = r.value);
 
@@ -362,9 +357,17 @@ async function handleAPI(request, env, path) {
       return json({ error: 'Alipay payment is not enabled' }, 400);
     }
 
+    // Auto-detect notify URL from request origin if not explicitly configured
+    let notifyUrl = cfg.alipay_notify_url || '';
+    if (!notifyUrl) {
+      const origin = new URL(request.url).origin;
+      notifyUrl = `${origin}/api/payment/alipay/notify`;
+    }
+
     const paymentData = generateAlipayQrCodeUrl(
       cfg.alipay_app_id, cfg.alipay_private_key,
-      order_no, parseFloat(total), subject || 'Order Payment'
+      order_no, parseFloat(total), subject || 'Order Payment',
+      notifyUrl
     );
 
     return json({ success: true, payment: paymentData });
