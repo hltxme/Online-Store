@@ -9,29 +9,97 @@ let uploadedImages = [];
 // --- i18n ---
 const adminI18n = {
   zh: {
-    dashboard: '仪表盘', products: '商品管理', categories: '分类管理', orders: '订单管理', pages: '页面管理', settings: '系统设置',
+    // Sidebar & Nav
+    store_admin: '商店管理', dashboard: '仪表盘', products: '商品管理', categories: '分类管理',
+    orders: '订单管理', pages: '页面管理', settings: '系统设置',
+    // Login
+    login_title: '管理后台', login_subtitle: '登录管理您的商店',
+    username: '用户名', password: '密码', sign_in: '登录', login_failed: '登录失败',
+    // Topbar
+    logout: '退出登录', view_site: '查看网站',
+    // Stats
     total_products: '商品总数', total_orders: '订单总数', total_pages: '页面总数', pending_orders: '待处理订单',
-    logout: '退出登录', view_site: '查看网站', save: '保存', cancel: '取消', edit: '编辑', delete: '删除',
-    add_product: '添加商品', add_category: '添加分类', add_page: '添加页面',
+    // Common actions
+    save: '保存', cancel: '取消', edit: '编辑', delete: '删除',
+    add_product: '添加商品', edit_product: '编辑商品', add_category: '添加分类', add_page: '添加页面', edit_page: '编辑页面',
+    // Table headers
     order_no: '订单号', customer: '客户', total: '总计', status: '状态', date: '日期', actions: '操作',
-    name: '名称', price: '价格', stock: '库存', image: '图片', slug: '标识',
+    name: '名称', price: '价格', stock: '库存', image: '图片', slug: '标识', products_count: '商品数',
+    // Form labels
     description: '描述', compare_price: '划线价', category: '分类', featured: '推荐',
-    active: '上架', draft: '草稿', pending: '待处理', completed: '已完成', cancelled: '已取消',
+    content_html: '内容 (HTML)',
+    // Product form
+    product_name: '商品名称', product_slug: '商品标识', product_desc: '商品描述',
+    product_price: '价格', product_compare: '划线价', product_category: '分类',
+    product_stock: '库存', product_status: '状态', product_featured: '是否推荐',
+    product_images: '商品图片',
+    // Category form
+    category_name: '分类名称', category_desc: '分类描述',
+    // Page form
+    page_title: '页面标题', page_slug: '页面标识', page_content: '内容 (HTML)', page_status: '状态',
+    // Settings
+    site_settings: '网站设置', change_password: '修改密码',
+    site_name: '网站名称', site_description: '网站描述', template: '模板',
+    currency: '货币符号', contact_email: '联系邮箱',
+    template_modern: '现代风格（简洁）', template_luxury: '奢华风格（典雅）',
+    current_password: '当前密码', new_password: '新密码', confirm_password: '确认密码',
+    update_password: '更新密码',
+    // Status values
+    active: '上架', draft: '草稿', published: '已发布', pending: '待处理', completed: '已完成', cancelled: '已取消',
+    yes: '是', no: '否',
+    // Select options
+    select_category: '— 请选择 —',
+    // Messages
     confirm_delete: '确定删除吗？', saved: '保存成功！', deleted: '已删除！', uploaded: '上传成功！',
-    password_changed: '密码已修改！', password_mismatch: '两次密码不一致', login_failed: '登录失败',
+    password_changed: '密码已修改！', password_mismatch: '两次密码不一致',
+    // Upload
     upload_hint: '点击或拖拽上传图片', auto_webp: '自动转换为WebP',
   },
   en: {
-    dashboard: 'Dashboard', products: 'Products', categories: 'Categories', orders: 'Orders', pages: 'Pages', settings: 'Settings',
+    // Sidebar & Nav
+    store_admin: 'Store Admin', dashboard: 'Dashboard', products: 'Products', categories: 'Categories',
+    orders: 'Orders', pages: 'Pages', settings: 'Settings',
+    // Login
+    login_title: 'Admin Panel', login_subtitle: 'Sign in to manage your store',
+    username: 'Username', password: 'Password', sign_in: 'Sign In', login_failed: 'Login failed',
+    // Topbar
+    logout: 'Logout', view_site: 'View Site',
+    // Stats
     total_products: 'Total Products', total_orders: 'Total Orders', total_pages: 'Total Pages', pending_orders: 'Pending Orders',
-    logout: 'Logout', view_site: 'View Site', save: 'Save', cancel: 'Cancel', edit: 'Edit', delete: 'Delete',
-    add_product: 'Add Product', add_category: 'Add Category', add_page: 'Add Page',
+    // Common actions
+    save: 'Save', cancel: 'Cancel', edit: 'Edit', delete: 'Delete',
+    add_product: 'Add Product', edit_product: 'Edit Product', add_category: 'Add Category', add_page: 'Add Page', edit_page: 'Edit Page',
+    // Table headers
     order_no: 'Order #', customer: 'Customer', total: 'Total', status: 'Status', date: 'Date', actions: 'Actions',
-    name: 'Name', price: 'Price', stock: 'Stock', image: 'Image', slug: 'Slug',
+    name: 'Name', price: 'Price', stock: 'Stock', image: 'Image', slug: 'Slug', products_count: 'Products',
+    // Form labels
     description: 'Description', compare_price: 'Compare Price', category: 'Category', featured: 'Featured',
-    active: 'Active', draft: 'Draft', pending: 'Pending', completed: 'Completed', cancelled: 'Cancelled',
+    content_html: 'Content (HTML)',
+    // Product form
+    product_name: 'Name', product_slug: 'Slug', product_desc: 'Description',
+    product_price: 'Price', product_compare: 'Compare Price', product_category: 'Category',
+    product_stock: 'Stock', product_status: 'Status', product_featured: 'Featured',
+    product_images: 'Images',
+    // Category form
+    category_name: 'Name', category_desc: 'Description',
+    // Page form
+    page_title: 'Title', page_slug: 'Slug', page_content: 'Content (HTML)', page_status: 'Status',
+    // Settings
+    site_settings: 'Site Settings', change_password: 'Change Password',
+    site_name: 'Site Name', site_description: 'Description', template: 'Template',
+    currency: 'Currency', contact_email: 'Contact Email',
+    template_modern: 'Modern (Clean)', template_luxury: 'Luxury (Elegant)',
+    current_password: 'Current Password', new_password: 'New Password', confirm_password: 'Confirm Password',
+    update_password: 'Update Password',
+    // Status values
+    active: 'Active', draft: 'Draft', published: 'Published', pending: 'Pending', completed: 'Completed', cancelled: 'Cancelled',
+    yes: 'Yes', no: 'No',
+    // Select options
+    select_category: '— Select —',
+    // Messages
     confirm_delete: 'Are you sure?', saved: 'Saved!', deleted: 'Deleted!', uploaded: 'Uploaded!',
-    password_changed: 'Password changed!', password_mismatch: 'Passwords do not match', login_failed: 'Login failed',
+    password_changed: 'Password changed!', password_mismatch: 'Passwords do not match',
+    // Upload
     upload_hint: 'Click or drag to upload images', auto_webp: 'Auto-converted to WebP',
   }
 };
@@ -39,8 +107,30 @@ const adminI18n = {
 let adminLang = localStorage.getItem('admin_lang') || 'zh';
 function at(key) { return (adminI18n[adminLang] || adminI18n.zh)[key] || key; }
 
+// Apply i18n to all static HTML elements with data-i18n attribute
+function applyI18n() {
+  const dict = adminI18n[adminLang] || adminI18n.zh;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (dict[key]) el.textContent = dict[key];
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-i18n-placeholder');
+    if (dict[key]) el.placeholder = dict[key];
+  });
+  document.querySelectorAll('[data-i18n-title]').forEach(el => {
+    const key = el.getAttribute('data-i18n-title');
+    if (dict[key]) el.title = dict[key];
+  });
+  // Update document title
+  document.title = dict.login_title || 'Admin Dashboard';
+  // Update html lang
+  document.documentElement.lang = adminLang === 'zh' ? 'zh' : 'en';
+}
+
 // --- Init ---
 document.addEventListener('DOMContentLoaded', () => {
+  applyI18n();
   if (token) showDashboard();
   else showLogin();
   initTheme();
@@ -126,8 +216,13 @@ function initLangSelector() {
   sel.addEventListener('change', (e) => {
     adminLang = e.target.value;
     localStorage.setItem('admin_lang', adminLang);
-    // Reload data to apply labels
+    applyI18n();
+    // Reload data to apply dynamic labels
     loadStats();
+    loadProducts();
+    loadCategories();
+    loadOrders();
+    loadPages();
   });
 }
 
@@ -172,12 +267,13 @@ async function loadProducts() {
     tbody.innerHTML = (data.products || []).map(p => {
       const images = typeof p.images === 'string' ? JSON.parse(p.images || '[]') : (p.images || []);
       const img = images[0];
+      const statusText = at(p.status) || p.status;
       return `<tr>
         <td>${img ? `<img src="${img}">` : '—'}</td>
         <td><strong>${p.name}</strong></td>
         <td>$${Number(p.price).toFixed(2)}</td>
         <td>${p.stock}</td>
-        <td><span class="badge badge-${p.status}">${p.status}</span></td>
+        <td><span class="badge badge-${p.status}">${statusText}</span></td>
         <td>
           <button class="btn btn-sm btn-outline" onclick="editProduct(${p.id})">✏️</button>
           <button class="btn btn-sm btn-danger" onclick="deleteProduct(${p.id})">🗑️</button>
@@ -188,7 +284,7 @@ async function loadProducts() {
 }
 
 function showProductForm(product = null) {
-  document.getElementById('productFormTitle').textContent = product ? 'Edit Product' : at('add_product');
+  document.getElementById('productFormTitle').textContent = product ? at('edit_product') : at('add_product');
   document.getElementById('pf_id').value = product?.id || '';
   document.getElementById('pf_name').value = product?.name || '';
   document.getElementById('pf_slug').value = product?.slug || '';
@@ -264,7 +360,7 @@ async function loadCategoryOptions(selected = '') {
     const res = await fetch(`${API}/api/categories`);
     const data = await res.json();
     const sel = document.getElementById('pf_category');
-    sel.innerHTML = '<option value="">—</option>' +
+    sel.innerHTML = `<option value="">${at('select_category')}</option>` +
       (data.categories || []).map(c => `<option value="${c.name}" ${c.name === selected ? 'selected' : ''}>${c.name}</option>`).join('');
   } catch {}
 }
@@ -296,23 +392,24 @@ async function loadOrders() {
     const res = await fetch(`${API}/api/orders`, { headers: headers() });
     const data = await res.json();
     const tbody = document.querySelector('#ordersTable tbody');
-    tbody.innerHTML = (data.orders || []).map(o => `
-      <tr>
+    tbody.innerHTML = (data.orders || []).map(o => {
+      const statusText = at(o.status) || o.status;
+      return `<tr>
         <td><strong>${o.order_no}</strong></td>
         <td>${o.customer_name}<br><small style="color:var(--text-muted)">${o.customer_email || ''}</small></td>
         <td>$${Number(o.total).toFixed(2)}</td>
-        <td><span class="badge badge-${o.status}">${o.status}</span></td>
+        <td><span class="badge badge-${o.status}">${statusText}</span></td>
         <td>${new Date(o.created_at).toLocaleDateString()}</td>
         <td>
           <select class="lang-select" onchange="updateOrderStatus(${o.id}, this.value)" style="font-size:0.8rem">
-            <option value="pending" ${o.status==='pending'?'selected':''}>Pending</option>
-            <option value="completed" ${o.status==='completed'?'selected':''}>Completed</option>
-            <option value="cancelled" ${o.status==='cancelled'?'selected':''}>Cancelled</option>
+            <option value="pending" ${o.status==='pending'?'selected':''}>${at('pending')}</option>
+            <option value="completed" ${o.status==='completed'?'selected':''}>${at('completed')}</option>
+            <option value="cancelled" ${o.status==='cancelled'?'selected':''}>${at('cancelled')}</option>
           </select>
           <button class="btn btn-sm btn-danger" onclick="deleteOrder(${o.id})" style="margin-left:4px">🗑️</button>
         </td>
-      </tr>
-    `).join('');
+      </tr>`;
+    }).join('');
   } catch {}
 }
 
@@ -333,11 +430,12 @@ async function loadPages() {
     const res = await fetch(`${API}/api/pages/all`, { headers: headers() });
     const data = await res.json();
     const tbody = document.querySelector('#pagesTable tbody');
-    tbody.innerHTML = (data.pages || []).map(p => `
-      <tr>
+    tbody.innerHTML = (data.pages || []).map(p => {
+      const statusText = at(p.status) || p.status;
+      return `<tr>
         <td><strong>${p.title}</strong></td>
         <td>${p.slug}</td>
-        <td><span class="badge badge-${p.status}">${p.status}</span></td>
+        <td><span class="badge badge-${p.status}">${statusText}</span></td>
         <td>
           <button class="btn btn-sm btn-outline" onclick="editPage(${p.id})">✏️</button>
           <button class="btn btn-sm btn-danger" onclick="deletePage(${p.id})">🗑️</button>
@@ -348,7 +446,7 @@ async function loadPages() {
 }
 
 function showPageForm(page = null) {
-  document.getElementById('pageFormTitle').textContent = page ? 'Edit Page' : at('add_page');
+  document.getElementById('pageFormTitle').textContent = page ? at('edit_page') : at('add_page');
   document.getElementById('pgf_id').value = page?.id || '';
   document.getElementById('pgf_title').value = page?.title || '';
   document.getElementById('pgf_slug').value = page?.slug || '';
