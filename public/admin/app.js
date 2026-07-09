@@ -272,7 +272,7 @@ async function loadProducts() {
         <td>${img ? `<img src="${img}">` : '—'}</td>
         <td><strong>${p.name}</strong></td>
         <td>$${Number(p.price).toFixed(2)}</td>
-        <td>${p.stock}</td>
+        <td>{p.stock}</td>
         <td><span class="badge badge-${p.status}">${statusText}</span></td>
         <td>
           <button class="btn btn-sm btn-outline" onclick="editProduct(${p.id})">✏️</button>
@@ -397,7 +397,7 @@ async function loadOrders() {
       return `<tr>
         <td><strong>${o.order_no}</strong></td>
         <td>${o.customer_name}<br><small style="color:var(--text-muted)">${o.customer_email || ''}</small></td>
-        <td>$${Number(o.total).toFixed(2)}</td>
+        <td>$$$${Number(o.total).toFixed(2)}</td>
         <td><span class="badge badge-${o.status}">${statusText}</span></td>
         <td>${new Date(o.created_at).toLocaleDateString()}</td>
         <td>
@@ -440,8 +440,8 @@ async function loadPages() {
           <button class="btn btn-sm btn-outline" onclick="editPage(${p.id})">✏️</button>
           <button class="btn btn-sm btn-danger" onclick="deletePage(${p.id})">🗑️</button>
         </td>
-      </tr>
-    `).join('');
+      </tr>`;
+    }).join('');
   } catch {}
 }
 
