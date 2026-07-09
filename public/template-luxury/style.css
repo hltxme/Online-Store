@@ -381,4 +381,87 @@ body {
   .form-row { grid-template-columns: 1fr; }
   .footer-top { flex-direction: column; gap: 24px; text-align: center; }
   .footer-links { gap: 20px; flex-wrap: wrap; justify-content: center; }
+  .pd-grid { grid-template-columns: 1fr; }
+  .checkout-grid { grid-template-columns: 1fr; }
+  .payment-grid { grid-template-columns: 1fr; }
 }
+
+/* ---- Back Link ---- */
+.back-link {
+  display: inline-block; color: var(--gold); font-weight: 500;
+  margin-bottom: 32px; text-decoration: none; font-size: 0.85rem;
+  letter-spacing: 0.05em; transition: var(--transition);
+}
+.back-link:hover { color: var(--primary); transform: translateX(-4px); }
+
+/* ---- Product Detail ---- */
+.pd-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
+.pd-images { position: sticky; top: 100px; }
+.pd-main-img { overflow: hidden; background: var(--bg-alt); margin-bottom: 16px; }
+.pd-main-img img { width: 100%; height: auto; display: block; }
+.pd-thumbs { display: flex; gap: 8px; }
+.pd-thumb { width: 80px; height: 100px; object-fit: cover; cursor: pointer; border: 1px solid var(--border); transition: var(--transition); }
+.pd-thumb.active, .pd-thumb:hover { border-color: var(--gold); }
+.pd-category { font-size: 0.7rem; color: var(--gold); text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 12px; }
+.pd-name { font-family: var(--font-display); font-size: 2.5rem; font-weight: 400; margin-bottom: 20px; line-height: 1.15; letter-spacing: 0.02em; }
+.pd-price { margin-bottom: 20px; }
+.pd-current { font-size: 1.8rem; font-weight: 500; }
+.pd-compare { font-size: 1.1rem; color: var(--text-muted); text-decoration: line-through; margin-left: 16px; font-weight: 300; }
+.pd-stock { font-size: 0.85rem; margin-bottom: 28px; padding: 10px 16px; display: inline-block; letter-spacing: 0.05em; }
+.in-stock { background: #065f4615; color: #5a7a5a; }
+.out-stock { background: #7f1d1d15; color: #8b3a3a; }
+.pd-desc { margin-bottom: 36px; }
+.pd-desc h3 { font-size: 0.8rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 16px; }
+.pd-desc-content { color: var(--text-secondary); line-height: 1.9; font-size: 0.95rem; font-weight: 300; }
+.pd-actions { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+.pd-qty { display: flex; align-items: center; gap: 12px; }
+.pd-qty label { font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-secondary); }
+.qty-control { display: flex; align-items: center; border: 1px solid var(--border); }
+.qty-control button { width: 44px; height: 44px; border: none; background: transparent; cursor: pointer; font-size: 1.2rem; color: var(--text); transition: var(--transition); }
+.qty-control button:hover { background: var(--bg-alt); }
+.qty-control span { width: 48px; text-align: center; font-weight: 500; font-size: 0.95rem; }
+.pd-add-btn { padding: 14px 36px; }
+.pd-buy-btn { padding: 14px 36px; background: transparent; color: var(--text); border: 1px solid var(--text); }
+.pd-buy-btn:hover { background: var(--text); color: var(--bg); }
+
+/* ---- Checkout ---- */
+.checkout-page { max-width: 1000px; margin: 0 auto; }
+.checkout-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; margin-top: 40px; }
+.checkout-items { display: flex; flex-direction: column; gap: 16px; }
+.checkout-item { display: flex; gap: 20px; padding: 20px; border: 1px solid var(--border); align-items: center; }
+.checkout-item-img { width: 70px; height: 90px; overflow: hidden; flex-shrink: 0; background: var(--bg-alt); }
+.checkout-item-img img { width: 100%; height: 100%; object-fit: cover; }
+.checkout-item-info { flex: 1; }
+.checkout-item-name { font-family: var(--font-display); font-size: 1rem; margin-bottom: 4px; }
+.checkout-item-price { color: var(--text-secondary); font-size: 0.85rem; }
+.checkout-item-subtotal { font-weight: 500; font-size: 1.05rem; }
+.checkout-empty { text-align: center; padding: 80px 0; grid-column: 1 / -1; }
+.checkout-empty p { color: var(--text-muted); margin-bottom: 24px; font-family: var(--font-display); font-size: 1.2rem; }
+.checkout-form-wrap { border: 1px solid var(--border); padding: 32px; position: sticky; top: 100px; }
+.checkout-form-wrap h3 { font-family: var(--font-display); font-size: 1.3rem; margin-bottom: 24px; letter-spacing: 0.05em; }
+.checkout-summary { background: var(--bg-alt); padding: 20px; margin-bottom: 24px; }
+.checkout-total-row { display: flex; justify-content: space-between; font-size: 1.2rem; font-weight: 500; }
+.checkout-total-amount { color: var(--gold); font-family: var(--font-display); }
+
+/* ---- Payment ---- */
+.payment-box, .payment-success-box { max-width: 700px; margin: 0 auto; border: 1px solid var(--border); padding: 48px; }
+.payment-box h2, .payment-success-box h2 { font-family: var(--font-display); font-size: 2rem; margin-bottom: 32px; text-align: center; font-weight: 400; letter-spacing: 0.05em; }
+.payment-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
+.payment-qr { text-align: center; }
+.qr-code-area { background: #fff; padding: 28px; border: 1px solid var(--border); display: inline-block; }
+.qr-placeholder { padding: 20px; }
+.qr-icon { font-size: 4rem; margin-bottom: 16px; }
+.qr-placeholder p { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 8px; }
+.qr-code-text { font-size: 0.7rem; color: var(--text-muted); word-break: break-all; background: var(--bg-alt); padding: 8px; }
+.payment-method-label { margin-top: 20px; font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.85rem; letter-spacing: 0.1em; text-transform: uppercase; }
+.alipay-icon { font-size: 1.2rem; }
+.payment-info h3 { font-family: var(--font-display); font-size: 1.2rem; margin-bottom: 24px; }
+.payment-detail-row { display: flex; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+.payment-detail-row:last-of-type { border-bottom: none; }
+.payment-amount { color: var(--gold); font-size: 1.4rem; font-family: var(--font-display); }
+.payment-note { color: var(--text-muted); font-size: 0.8rem; margin: 20px 0; text-align: center; letter-spacing: 0.05em; }
+.payment-info-simple { max-width: 400px; margin: 0 auto; }
+.payment-success-box { text-align: center; }
+.payment-icon { font-size: 4rem; margin-bottom: 20px; }
+.payment-success-box p { color: var(--text-secondary); margin-bottom: 10px; }
+.badge-pending { background: #1e3a5f15; color: #3b82f6; padding: 4px 14px; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.05em; }
