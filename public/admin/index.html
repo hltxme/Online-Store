@@ -242,7 +242,8 @@
             </div>
             <div class="form-group">
               <label data-i18n="alipay_notify_url">Payment Notification URL</label>
-              <input type="text" id="alipay_notify_url" placeholder="https://your-domain.com/api/payment/alipay/notify">
+              <input type="text" id="alipay_notify_url" placeholder="留空则自动跟随当前站点域名">
+              <small style="color:var(--text-muted);font-size:0.8rem" data-i18n="alipay_notify_hint">留空时自动使用当前访问域名 + /api/payment/alipay/notify</small>
             </div>
             <button type="submit" class="btn btn-primary" data-i18n="save">Save Payment Settings</button>
           </form>
