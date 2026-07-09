@@ -174,17 +174,61 @@ npm run deploy
 | 功能 | 说明 |
 |------|------|
 | **Dashboard** | 查看商品数、订单数、页面数、待处理订单 |
-| **Products** | 添加/编辑/删除商品，支持图片上传（自动转 WebP） |
+| **Products** | 添加/编辑/删除商品，支持图片上传（自动转 WebP），**TinyMCE 富文本编辑器** |
 | **Categories** | 管理商品分类 |
 | **Orders** | 查看/处理/删除订单，可更改订单状态 |
 | **Pages** | 管理自定义页面（关于我们、联系方式等） |
-| **Settings** | 站点名称、模板切换、货币设置、修改密码 |
+| **Payment Settings** | 💳 支付宝当面付配置（App ID、私钥、回调地址） |
+| **Settings** | 站点名称、模板切换、货币设置、修改密码、**Logo/Favicon 设置**、**订单通知（Telegram + 邮件）** |
 
 ### 模板切换
 
 在后台 **Settings** → **Template** 下拉选择：
 - **Modern** - 现代简约风格（渐变色、圆角卡片、清爽布局）
 - **Luxury** - 奢华品牌风格（金色点缀、衬线字体、优雅排版）
+
+### 前台页面路由
+
+每个模板都支持以下页面（通过 Hash 路由实现）：
+
+| 路由 | 说明 |
+|------|------|
+| `/#home` | 首页（默认） |
+| `/#products` | 商品列表 |
+| `/#product/{id}` | **商品详情页**（新增） |
+| `/#checkout` | **购物车结算页**（新增） |
+| `/#payment/{order_no}` | **支付页面**（新增） |
+
+### 支付宝当面付接入
+
+1. 在后台 **Payment Settings** 页面配置支付宝参数
+2. 在 [open.alipay.com](https://open.alipay.com) 注册开发者账号
+3. 创建应用并开通 **当面付** 能力
+4. 生成 RSA2 密钥对，填入 App ID 和应用私钥
+5. 设置支付回调通知地址
+6. 客户下单后会自动生成付款二维码，扫码即可支付
+7. 支付状态通过回调自动更新
+
+### 订单通知
+
+在后台 **Settings** → **Order Notifications** 配置：
+
+**Telegram 通知：**
+1. 通过 [@BotFather](https://t.me/BotFather) 创建 Bot，获取 Token
+2. 获取目标 Chat ID（可使用 [@userinfobot](https://t.me/userinfobot)）
+3. 填入 Token 和 Chat ID，点击「测试 Telegram」验证
+
+**邮件通知（微软 Graph API）：**
+1. 在 Azure AD 注册应用，获取 access token
+2. 填入 Graph API Token、发件人邮箱、接收通知邮箱
+3. 点击「测试邮件」验证
+
+### Logo 与网站图标
+
+在后台 **Settings** → **Logo & Favicon** 上传：
+- **网站 Logo**：显示在前台页面左上角
+- **网站图标 (Favicon)**：浏览器标签页图标
+- 支持 JPG/PNG/SVG/ICO 格式
 
 ### 多语言支持
 
@@ -205,7 +249,21 @@ npm run deploy
 4. 上传到 R2 存储
 5. 缩略图信息存储在 KV 中
 
-### API 端点
+### TinyMCE 富文本编辑器
+
+商品管理的描述字段使用 TinyMCE 编辑器，支持：
+- 文本格式化（加粗、斜体、下划线、删除线）
+- 标题/段落样式
+- 有序/无序列表
+- 链接、图片插入
+- 表格、代码块
+- 全屏编辑、预览
+
+---
+
+## API 端点
+
+### 核心 API
 
 | Method | Path | 说明 |
 |--------|------|------|
@@ -214,6 +272,7 @@ npm run deploy
 | POST | `/api/auth/change-password` | 修改密码 |
 | GET | `/api/products` | 获取商品列表 |
 | GET | `/api/products/all` | 获取所有商品（需认证） |
+| GET | `/api/products/:id` | 获取单个商品详情 |
 | POST | `/api/products` | 创建商品（需认证） |
 | PUT | `/api/products/:id` | 更新商品（需认证） |
 | DELETE | `/api/products/:id` | 删除商品（需认证） |
@@ -221,7 +280,7 @@ npm run deploy
 | POST | `/api/categories` | 创建分类（需认证） |
 | DELETE | `/api/categories/:id` | 删除分类（需认证） |
 | GET | `/api/orders` | 获取订单列表（需认证） |
-| POST | `/api/orders` | 创建订单 |
+| POST | `/api/orders` | 创建订单（自动触发通知） |
 | PUT | `/api/orders/:id` | 更新订单状态（需认证） |
 | DELETE | `/api/orders/:id` | 删除订单（需认证） |
 | GET | `/api/pages` | 获取已发布页面 |
@@ -234,6 +293,19 @@ npm run deploy
 | POST | `/api/upload` | 上传图片（需认证） |
 | GET | `/api/files/:key` | 获取 R2 文件 |
 | GET | `/api/stats` | 获取统计数据（需认证） |
+
+### 支付 API（新增）
+
+| Method | Path | 说明 |
+|--------|------|------|
+| POST | `/api/payment/alipay/create` | 创建支付宝当面付订单 |
+| GET | `/api/payment/alipay/query` | 查询支付宝支付状态 |
+
+### 通知 API（新增）
+
+| Method | Path | 说明 |
+|--------|------|------|
+| POST | `/api/notifications/test` | 测试通知发送（Telegram/Email） |
 
 ---
 
@@ -253,3 +325,5 @@ npm run deploy
 2. 定期备份 D1 数据库
 3. 考虑启用 Cloudflare 的 WAF 规则
 4. 生产环境建议修改 `_worker.js` 中的 `JWT_SECRET`
+5. 支付宝私钥等敏感信息存储在 D1 中，确保数据库安全
+6. 微软 Graph API Token 有有效期，需要定期更新
