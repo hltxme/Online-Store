@@ -464,3 +464,20 @@ body {
 .payment-icon { font-size: 4rem; margin-bottom: 20px; }
 .payment-success-box p { color: var(--text-secondary); margin-bottom: 10px; }
 .badge-pending { background: #1e3a5f15; color: #3b82f6; padding: 4px 14px; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.05em; }
+
+/* ---- Custom Page ---- */
+.page-article { max-width: 800px; margin: 0 auto; }
+.page-article-title { font-family: var(--font-display); font-size: 2.5rem; font-weight: 400; margin-bottom: 28px; line-height: 1.2; letter-spacing: 0.02em; }
+.page-article-body { color: var(--text-secondary); line-height: 1.9; font-size: 1rem; font-weight: 300; }
+.page-article-body h1, .page-article-body h2, .page-article-body h3 { color: var(--text); margin-top: 28px; margin-bottom: 14px; font-family: var(--font-display); }
+.page-article-body p { margin-bottom: 18px; }
+.page-article-body img { max-width: 100%; margin: 20px 0; }
+.page-article-body a { color: var(--gold); }
+.page-article-body ul, .page-article-body ol { padding-left: 24px; margin-bottom: 18px; }
+.page-article-body li { margin-bottom: 8px; }
+#customPagesNav a {
+  text-decoration: none; color: var(--text-secondary);
+  font-size: 0.8rem; font-weight: 500; letter-spacing: 0.12em;
+  transition: var(--transition); text-transform: uppercase;
+}
+#customPagesNav a:hover { color: var(--gold); }
