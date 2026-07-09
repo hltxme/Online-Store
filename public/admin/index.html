@@ -13,19 +13,19 @@
     <div class="login-logo">
       <svg width="48" height="48" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="8" fill="url(#g1)"/><path d="M8 16L14 22L24 10" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><defs><linearGradient id="g1" x1="0" y1="0" x2="32" y2="32"><stop stop-color="#6366f1"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs></svg>
     </div>
-    <h1>Admin Panel</h1>
-    <p>Sign in to manage your store</p>
+    <h1 data-i18n="login_title">Admin Panel</h1>
+    <p data-i18n="login_subtitle">Sign in to manage your store</p>
     <form id="loginForm">
       <div class="form-group">
-        <label>Username</label>
+        <label data-i18n="username">Username</label>
         <input type="text" id="loginUser" value="admin" required>
       </div>
       <div class="form-group">
-        <label>Password</label>
+        <label data-i18n="password">Password</label>
         <input type="password" id="loginPass" value="123456" required>
       </div>
       <div class="login-error" id="loginError"></div>
-      <button type="submit" class="btn btn-primary btn-full">Sign In</button>
+      <button type="submit" class="btn btn-primary btn-full" data-i18n="sign_in">Sign In</button>
     </form>
   </div>
 </div>
@@ -35,31 +35,31 @@
   <!-- Sidebar -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
-      <span class="sidebar-logo">📦 Store Admin</span>
+      <span class="sidebar-logo" data-i18n="store_admin">📦 Store Admin</span>
       <button class="sidebar-close" id="sidebarClose">&times;</button>
     </div>
     <nav class="sidebar-nav">
       <a href="#" class="nav-item active" data-page="overview">
-        <span class="nav-icon">📊</span> Dashboard
+        <span class="nav-icon">📊</span> <span data-i18n="dashboard">Dashboard</span>
       </a>
       <a href="#" class="nav-item" data-page="products">
-        <span class="nav-icon">🛍️</span> Products
+        <span class="nav-icon">🛍️</span> <span data-i18n="products">Products</span>
       </a>
       <a href="#" class="nav-item" data-page="categories">
-        <span class="nav-icon">📁</span> Categories
+        <span class="nav-icon">📁</span> <span data-i18n="categories">Categories</span>
       </a>
       <a href="#" class="nav-item" data-page="orders">
-        <span class="nav-icon">📋</span> Orders
+        <span class="nav-icon">📋</span> <span data-i18n="orders">Orders</span>
       </a>
       <a href="#" class="nav-item" data-page="pages">
-        <span class="nav-icon">📄</span> Pages
+        <span class="nav-icon">📄</span> <span data-i18n="pages">Pages</span>
       </a>
       <a href="#" class="nav-item" data-page="settings">
-        <span class="nav-icon">⚙️</span> Settings
+        <span class="nav-icon">⚙️</span> <span data-i18n="settings">Settings</span>
       </a>
     </nav>
     <div class="sidebar-footer">
-      <button class="btn btn-outline btn-full" id="logoutBtn">Logout</button>
+      <button class="btn btn-outline btn-full" id="logoutBtn" data-i18n="logout">Logout</button>
     </div>
   </aside>
 
@@ -75,65 +75,65 @@
         <button class="theme-toggle" id="themeToggle">
           <span class="icon-sun">☀️</span><span class="icon-moon" style="display:none">🌙</span>
         </button>
-        <a href="/" target="_blank" class="btn btn-sm btn-outline">View Site</a>
+        <a href="/" target="_blank" class="btn btn-sm btn-outline" data-i18n="view_site">View Site</a>
       </div>
     </div>
 
     <!-- Page: Overview -->
     <div class="page active" id="page-overview">
-      <h2>Dashboard</h2>
+      <h2 data-i18n="dashboard">Dashboard</h2>
       <div class="stats-grid" id="statsGrid"></div>
     </div>
 
     <!-- Page: Products -->
     <div class="page" id="page-products">
       <div class="page-header">
-        <h2>Products</h2>
-        <button class="btn btn-primary" onclick="showProductForm()">+ Add Product</button>
+        <h2 data-i18n="products">Products</h2>
+        <button class="btn btn-primary" onclick="showProductForm()" data-i18n="add_product">+ Add Product</button>
       </div>
       <div class="table-wrap">
         <table class="table" id="productsTable">
-          <thead><tr><th>Image</th><th>Name</th><th>Price</th><th>Stock</th><th>Status</th><th>Actions</th></tr></thead>
+          <thead><tr><th data-i18n="image">Image</th><th data-i18n="name">Name</th><th data-i18n="price">Price</th><th data-i18n="stock">Stock</th><th data-i18n="status">Status</th><th data-i18n="actions">Actions</th></tr></thead>
           <tbody></tbody>
         </table>
       </div>
       <!-- Product Form Modal -->
       <div class="modal-overlay" id="productModal">
         <div class="modal modal-lg">
-          <div class="modal-header"><h3 id="productFormTitle">Add Product</h3><button class="modal-close" onclick="closeModal('productModal')">&times;</button></div>
+          <div class="modal-header"><h3 data-i18n="add_product" id="productFormTitle">Add Product</h3><button class="modal-close" onclick="closeModal('productModal')">&times;</button></div>
           <form id="productForm">
             <input type="hidden" id="pf_id">
             <div class="form-row">
-              <div class="form-group"><label>Name</label><input type="text" id="pf_name" required></div>
-              <div class="form-group"><label>Slug</label><input type="text" id="pf_slug" placeholder="auto-generated"></div>
+              <div class="form-group"><label data-i18n="name">Name</label><input type="text" id="pf_name" required></div>
+              <div class="form-group"><label data-i18n="slug">Slug</label><input type="text" id="pf_slug" placeholder="auto-generated"></div>
             </div>
-            <div class="form-group"><label>Description</label><textarea id="pf_desc" rows="3"></textarea></div>
+            <div class="form-group"><label data-i18n="description">Description</label><textarea id="pf_desc" rows="3"></textarea></div>
             <div class="form-row">
-              <div class="form-group"><label>Price</label><input type="number" id="pf_price" step="0.01" required></div>
-              <div class="form-group"><label>Compare Price</label><input type="number" id="pf_compare" step="0.01"></div>
-            </div>
-            <div class="form-row">
-              <div class="form-group"><label>Category</label><select id="pf_category"></select></div>
-              <div class="form-group"><label>Stock</label><input type="number" id="pf_stock" value="0"></div>
+              <div class="form-group"><label data-i18n="price">Price</label><input type="number" id="pf_price" step="0.01" required></div>
+              <div class="form-group"><label data-i18n="compare_price">Compare Price</label><input type="number" id="pf_compare" step="0.01"></div>
             </div>
             <div class="form-row">
-              <div class="form-group"><label>Status</label><select id="pf_status"><option value="active">Active</option><option value="draft">Draft</option></select></div>
-              <div class="form-group"><label>Featured</label><select id="pf_featured"><option value="0">No</option><option value="1">Yes</option></select></div>
+              <div class="form-group"><label data-i18n="category">Category</label><select id="pf_category"></select></div>
+              <div class="form-group"><label data-i18n="stock">Stock</label><input type="number" id="pf_stock" value="0"></div>
+            </div>
+            <div class="form-row">
+              <div class="form-group"><label data-i18n="status">Status</label><select id="pf_status"><option value="active" data-i18n="active">Active</option><option value="draft" data-i18n="draft">Draft</option></select></div>
+              <div class="form-group"><label data-i18n="featured">Featured</label><select id="pf_featured"><option value="0" data-i18n="no">No</option><option value="1" data-i18n="yes">Yes</option></select></div>
             </div>
             <div class="form-group">
-              <label>Images</label>
+              <label data-i18n="image">Images</label>
               <div class="upload-area" id="uploadArea">
                 <input type="file" id="fileInput" accept="image/*" multiple style="display:none">
                 <div class="upload-placeholder" id="uploadPlaceholder">
-                  <span>📷 Click or drag to upload images</span>
-                  <small>Auto-converted to WebP</small>
+                  <span data-i18n="upload_hint">📷 Click or drag to upload images</span>
+                  <small data-i18n="auto_webp">Auto-converted to WebP</small>
                 </div>
                 <div class="upload-preview" id="uploadPreview"></div>
               </div>
             </div>
             <div class="form-actions">
-              <button type="button" class="btn btn-outline" onclick="closeModal('productModal')">Cancel</button>
-              <button type="submit" class="btn btn-primary">Save Product</button>
+              <button type="button" class="btn btn-outline" onclick="closeModal('productModal')" data-i18n="cancel">Cancel</button>
+              <button type="submit" class="btn btn-primary" data-i18n="save">Save Product</button>
             </div>
           </form>
         </div>
@@ -143,24 +143,24 @@
     <!-- Page: Categories -->
     <div class="page" id="page-categories">
       <div class="page-header">
-        <h2>Categories</h2>
-        <button class="btn btn-primary" onclick="showCategoryForm()">+ Add Category</button>
+        <h2 data-i18n="categories">Categories</h2>
+        <button class="btn btn-primary" onclick="showCategoryForm()" data-i18n="add_category">+ Add Category</button>
       </div>
       <div class="table-wrap">
         <table class="table" id="categoriesTable">
-          <thead><tr><th>Name</th><th>Slug</th><th>Products</th><th>Actions</th></tr></thead>
+          <thead><tr><th data-i18n="name">Name</th><th data-i18n="slug">Slug</th><th data-i18n="products_count">Products</th><th data-i18n="actions">Actions</th></tr></thead>
           <tbody></tbody>
         </table>
       </div>
       <div class="modal-overlay" id="categoryModal">
         <div class="modal">
-          <div class="modal-header"><h3>Add Category</h3><button class="modal-close" onclick="closeModal('categoryModal')">&times;</button></div>
+          <div class="modal-header"><h3 data-i18n="add_category">Add Category</h3><button class="modal-close" onclick="closeModal('categoryModal')">&times;</button></div>
           <form id="categoryForm">
-            <div class="form-group"><label>Name</label><input type="text" id="cf_name" required></div>
-            <div class="form-group"><label>Description</label><textarea id="cf_desc" rows="2"></textarea></div>
+            <div class="form-group"><label data-i18n="name">Name</label><input type="text" id="cf_name" required></div>
+            <div class="form-group"><label data-i18n="description">Description</label><textarea id="cf_desc" rows="2"></textarea></div>
             <div class="form-actions">
-              <button type="button" class="btn btn-outline" onclick="closeModal('categoryModal')">Cancel</button>
-              <button type="submit" class="btn btn-primary">Save</button>
+              <button type="button" class="btn btn-outline" onclick="closeModal('categoryModal')" data-i18n="cancel">Cancel</button>
+              <button type="submit" class="btn btn-primary" data-i18n="save">Save</button>
             </div>
           </form>
         </div>
@@ -169,10 +169,10 @@
 
     <!-- Page: Orders -->
     <div class="page" id="page-orders">
-      <h2>Orders</h2>
+      <h2 data-i18n="orders">Orders</h2>
       <div class="table-wrap">
         <table class="table" id="ordersTable">
-          <thead><tr><th>Order #</th><th>Customer</th><th>Total</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
+          <thead><tr><th data-i18n="order_no">Order #</th><th data-i18n="customer">Customer</th><th data-i18n="total">Total</th><th data-i18n="status">Status</th><th data-i18n="date">Date</th><th data-i18n="actions">Actions</th></tr></thead>
           <tbody></tbody>
         </table>
       </div>
@@ -181,29 +181,29 @@
     <!-- Page: Pages -->
     <div class="page" id="page-pages">
       <div class="page-header">
-        <h2>Pages</h2>
-        <button class="btn btn-primary" onclick="showPageForm()">+ Add Page</button>
+        <h2 data-i18n="pages">Pages</h2>
+        <button class="btn btn-primary" onclick="showPageForm()" data-i18n="add_page">+ Add Page</button>
       </div>
       <div class="table-wrap">
         <table class="table" id="pagesTable">
-          <thead><tr><th>Title</th><th>Slug</th><th>Status</th><th>Actions</th></tr></thead>
+          <thead><tr><th data-i18n="name">Title</th><th data-i18n="slug">Slug</th><th data-i18n="status">Status</th><th data-i18n="actions">Actions</th></tr></thead>
           <tbody></tbody>
         </table>
       </div>
       <div class="modal-overlay" id="pageModal">
         <div class="modal modal-lg">
-          <div class="modal-header"><h3 id="pageFormTitle">Add Page</h3><button class="modal-close" onclick="closeModal('pageModal')">&times;</button></div>
+          <div class="modal-header"><h3 data-i18n="add_page" id="pageFormTitle">Add Page</h3><button class="modal-close" onclick="closeModal('pageModal')">&times;</button></div>
           <form id="pageForm">
             <input type="hidden" id="pgf_id">
             <div class="form-row">
-              <div class="form-group"><label>Title</label><input type="text" id="pgf_title" required></div>
-              <div class="form-group"><label>Slug</label><input type="text" id="pgf_slug"></div>
+              <div class="form-group"><label data-i18n="name">Title</label><input type="text" id="pgf_title" required></div>
+              <div class="form-group"><label data-i18n="slug">Slug</label><input type="text" id="pgf_slug"></div>
             </div>
-            <div class="form-group"><label>Content (HTML)</label><textarea id="pgf_body" rows="10"></textarea></div>
-            <div class="form-group"><label>Status</label><select id="pgf_status"><option value="published">Published</option><option value="draft">Draft</option></select></div>
+            <div class="form-group"><label data-i18n="content_html">Content (HTML)</label><textarea id="pgf_body" rows="10"></textarea></div>
+            <div class="form-group"><label data-i18n="status">Status</label><select id="pgf_status"><option value="published" data-i18n="published">Published</option><option value="draft" data-i18n="draft">Draft</option></select></div>
             <div class="form-actions">
-              <button type="button" class="btn btn-outline" onclick="closeModal('pageModal')">Cancel</button>
-              <button type="submit" class="btn btn-primary">Save</button>
+              <button type="button" class="btn btn-outline" onclick="closeModal('pageModal')" data-i18n="cancel">Cancel</button>
+              <button type="submit" class="btn btn-primary" data-i18n="save">Save</button>
             </div>
           </form>
         </div>
@@ -212,31 +212,31 @@
 
     <!-- Page: Settings -->
     <div class="page" id="page-settings">
-      <h2>Settings</h2>
+      <h2 data-i18n="settings">Settings</h2>
       <div class="settings-grid">
         <div class="card">
-          <h3>Site Settings</h3>
+          <h3 data-i18n="site_settings">Site Settings</h3>
           <form id="siteSettingsForm">
-            <div class="form-group"><label>Site Name</label><input type="text" id="set_name"></div>
-            <div class="form-group"><label>Description</label><textarea id="set_desc" rows="2"></textarea></div>
-            <div class="form-group"><label>Template</label>
+            <div class="form-group"><label data-i18n="site_name">Site Name</label><input type="text" id="set_name"></div>
+            <div class="form-group"><label data-i18n="site_description">Description</label><textarea id="set_desc" rows="2"></textarea></div>
+            <div class="form-group"><label data-i18n="template">Template</label>
               <select id="set_template">
-                <option value="modern">Modern (Clean)</option>
-                <option value="luxury">Luxury (Elegant)</option>
+                <option value="modern" data-i18n="template_modern">Modern (Clean)</option>
+                <option value="luxury" data-i18n="template_luxury">Luxury (Elegant)</option>
               </select>
             </div>
-            <div class="form-group"><label>Currency</label><input type="text" id="set_currency" placeholder="USD"></div>
-            <div class="form-group"><label>Contact Email</label><input type="email" id="set_email"></div>
-            <button type="submit" class="btn btn-primary">Save Settings</button>
+            <div class="form-group"><label data-i18n="currency">Currency</label><input type="text" id="set_currency" placeholder="USD"></div>
+            <div class="form-group"><label data-i18n="contact_email">Contact Email</label><input type="email" id="set_email"></div>
+            <button type="submit" class="btn btn-primary" data-i18n="save">Save Settings</button>
           </form>
         </div>
         <div class="card">
-          <h3>Change Password</h3>
+          <h3 data-i18n="change_password">Change Password</h3>
           <form id="passwordForm">
-            <div class="form-group"><label>Current Password</label><input type="password" id="pw_old" required></div>
-            <div class="form-group"><label>New Password</label><input type="password" id="pw_new" required></div>
-            <div class="form-group"><label>Confirm Password</label><input type="password" id="pw_confirm" required></div>
-            <button type="submit" class="btn btn-primary">Update Password</button>
+            <div class="form-group"><label data-i18n="current_password">Current Password</label><input type="password" id="pw_old" required></div>
+            <div class="form-group"><label data-i18n="new_password">New Password</label><input type="password" id="pw_new" required></div>
+            <div class="form-group"><label data-i18n="confirm_password">Confirm Password</label><input type="password" id="pw_confirm" required></div>
+            <button type="submit" class="btn btn-primary" data-i18n="update_password">Update Password</button>
           </form>
         </div>
       </div>
