@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin Dashboard</title>
 <link rel="stylesheet" href="/admin/style.css">
+<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
 </head>
 <body>
 <!-- Login -->
@@ -53,6 +54,9 @@
       </a>
       <a href="#" class="nav-item" data-page="pages">
         <span class="nav-icon">📄</span> <span data-i18n="pages">Pages</span>
+      </a>
+      <a href="#" class="nav-item" data-page="payment">
+        <span class="nav-icon">💳</span> <span data-i18n="payment_settings">Payment Settings</span>
       </a>
       <a href="#" class="nav-item" data-page="settings">
         <span class="nav-icon">⚙️</span> <span data-i18n="settings">Settings</span>
@@ -107,7 +111,7 @@
               <div class="form-group"><label data-i18n="name">Name</label><input type="text" id="pf_name" required></div>
               <div class="form-group"><label data-i18n="slug">Slug</label><input type="text" id="pf_slug" placeholder="auto-generated"></div>
             </div>
-            <div class="form-group"><label data-i18n="description">Description</label><textarea id="pf_desc" rows="3"></textarea></div>
+            <div class="form-group"><label data-i18n="description">Description</label><div id="pf_desc_editor"></div><textarea id="pf_desc" rows="3" style="display:none"></textarea></div>
             <div class="form-row">
               <div class="form-group"><label data-i18n="price">Price</label><input type="number" id="pf_price" step="0.01" required></div>
               <div class="form-group"><label data-i18n="compare_price">Compare Price</label><input type="number" id="pf_compare" step="0.01"></div>
@@ -210,6 +214,58 @@
       </div>
     </div>
 
+    <!-- Page: Payment Settings -->
+    <div class="page" id="page-payment">
+      <h2 data-i18n="payment_settings">Payment Settings</h2>
+      <div class="settings-grid">
+        <div class="card">
+          <h3>💙 <span data-i18n="alipay_f2f">Alipay Face-to-Face Payment</span></h3>
+          <form id="alipayForm">
+            <div class="form-group">
+              <label data-i18n="enable_alipay">Enable Alipay F2F</label>
+              <select id="alipay_enabled">
+                <option value="0" data-i18n="no">No</option>
+                <option value="1" data-i18n="yes">Yes</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label data-i18n="alipay_app_id">Alipay App ID</label>
+              <input type="text" id="alipay_app_id" placeholder="e.g. 2021000000000000">
+            </div>
+            <div class="form-group">
+              <label data-i18n="alipay_private_key">Application Private Key</label>
+              <textarea id="alipay_private_key" rows="4" placeholder="RSA2 private key..."></textarea>
+            </div>
+            <div class="form-group">
+              <label data-i18n="alipay_public_key">Alipay Public Key (optional)</label>
+              <textarea id="alipay_public_key" rows="3" placeholder="Alipay public key for verification..."></textarea>
+            </div>
+            <div class="form-group">
+              <label data-i18n="alipay_notify_url">Payment Notification URL</label>
+              <input type="text" id="alipay_notify_url" placeholder="https://your-domain.com/api/payment/alipay/notify">
+            </div>
+            <button type="submit" class="btn btn-primary" data-i18n="save">Save Payment Settings</button>
+          </form>
+        </div>
+        <div class="card">
+          <h3 data-i18n="payment_guide">📖 Payment Guide</h3>
+          <div class="guide-content">
+            <p data-i18n="alipay_guide_text">To use Alipay Face-to-Face payment:</p>
+            <ol>
+              <li data-i18n="alipay_step1">Register an Alipay developer account at <a href="https://open.alipay.com" target="_blank">open.alipay.com</a></li>
+              <li data-i18n="alipay_step2">Create an application and enable "当面付" (Face-to-Face Payment)</li>
+              <li data-i18n="alipay_step3">Generate RSA2 key pair and configure in the application</li>
+              <li data-i18n="alipay_step4">Copy App ID and Private Key to the fields on the left</li>
+              <li data-i18n="alipay_step5">Set the payment notification URL to receive payment callbacks</li>
+            </ol>
+            <div class="guide-note">
+              <strong data-i18n="note">Note:</strong> <span data-i18n="alipay_note">After a customer places an order, a QR code will be generated for them to scan with Alipay. The payment status will be updated automatically via callback.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Page: Settings -->
     <div class="page" id="page-settings">
       <h2 data-i18n="settings">Settings</h2>
@@ -237,6 +293,95 @@
             <div class="form-group"><label data-i18n="new_password">New Password</label><input type="password" id="pw_new" required></div>
             <div class="form-group"><label data-i18n="confirm_password">Confirm Password</label><input type="password" id="pw_confirm" required></div>
             <button type="submit" class="btn btn-primary" data-i18n="update_password">Update Password</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Logo & Favicon Settings -->
+      <div class="settings-grid" style="margin-top:24px">
+        <div class="card">
+          <h3>🖼️ <span data-i18n="logo_settings">Logo & Favicon</span></h3>
+          <form id="logoSettingsForm">
+            <div class="form-group">
+              <label data-i18n="site_logo">Website Logo</label>
+              <div class="logo-upload-row">
+                <div class="logo-preview" id="logoPreview">
+                  <span data-i18n="no_logo">No logo uploaded</span>
+                </div>
+                <div>
+                  <input type="file" id="logoFileInput" accept="image/*" style="display:none">
+                  <button type="button" class="btn btn-outline btn-sm" onclick="document.getElementById('logoFileInput').click()" data-i18n="upload_logo">Upload Logo</button>
+                  <button type="button" class="btn btn-sm btn-danger" onclick="removeLogo()" data-i18n="remove">Remove</button>
+                  <input type="hidden" id="set_site_logo">
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label data-i18n="site_favicon">Website Favicon</label>
+              <div class="logo-upload-row">
+                <div class="favicon-preview" id="faviconPreview">
+                  <span data-i18n="no_favicon">No favicon uploaded</span>
+                </div>
+                <div>
+                  <input type="file" id="faviconFileInput" accept="image/*,.ico" style="display:none">
+                  <button type="button" class="btn btn-outline btn-sm" onclick="document.getElementById('faviconFileInput').click()" data-i18n="upload_favicon">Upload Favicon</button>
+                  <button type="button" class="btn btn-sm btn-danger" onclick="removeFavicon()" data-i18n="remove">Remove</button>
+                  <input type="hidden" id="set_site_favicon">
+                </div>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary" data-i18n="save">Save Logo Settings</button>
+          </form>
+        </div>
+
+        <!-- Notification Settings -->
+        <div class="card">
+          <h3>🔔 <span data-i18n="notification_settings">Order Notifications</span></h3>
+          <form id="notificationForm">
+            <h4 class="sub-heading">📱 Telegram</h4>
+            <div class="form-group">
+              <label data-i18n="enable_tg">Enable Telegram Notification</label>
+              <select id="notify_tg_enabled">
+                <option value="0" data-i18n="no">No</option>
+                <option value="1" data-i18n="yes">Yes</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label data-i18n="tg_bot_token">Telegram Bot Token</label>
+              <input type="text" id="notify_tg_bot_token" placeholder="123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11">
+            </div>
+            <div class="form-group">
+              <label data-i18n="tg_chat_id">Telegram Chat ID</label>
+              <input type="text" id="notify_tg_chat_id" placeholder="-1001234567890">
+            </div>
+            <button type="button" class="btn btn-outline btn-sm" onclick="testNotification('telegram')" data-i18n="test_tg">Test Telegram</button>
+
+            <hr class="divider">
+
+            <h4 class="sub-heading">📧 <span data-i18n="email_via_ms">Email (Microsoft Graph API)</span></h4>
+            <div class="form-group">
+              <label data-i18n="enable_email">Enable Email Notification</label>
+              <select id="notify_email_enabled">
+                <option value="0" data-i18n="no">No</option>
+                <option value="1" data-i18n="yes">Yes</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label data-i18n="ms_graph_token">Microsoft Graph API Token</label>
+              <textarea id="notify_ms_graph_token" rows="2" placeholder="Bearer token from Azure AD..."></textarea>
+            </div>
+            <div class="form-group">
+              <label data-i18n="email_from">Sender Email (From)</label>
+              <input type="email" id="notify_email_from" placeholder="noreply@yourdomain.com">
+            </div>
+            <div class="form-group">
+              <label data-i18n="email_to">Notification Email (To)</label>
+              <input type="email" id="notify_email_to" placeholder="admin@yourdomain.com">
+            </div>
+            <button type="button" class="btn btn-outline btn-sm" onclick="testNotification('email')" data-i18n="test_email">Test Email</button>
+
+            <hr class="divider">
+            <button type="submit" class="btn btn-primary" data-i18n="save_notifications">Save Notification Settings</button>
           </form>
         </div>
       </div>
