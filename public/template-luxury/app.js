@@ -570,19 +570,20 @@ async function loadPaymentPage(orderNo) {
             <h2>${t('payment_title')}</h2>
             <div class="payment-grid">
               <div class="payment-qr">
-                <div class="qr-code-area"><div class="qr-placeholder"><div class="qr-icon">📱</div><p>${t('scan_qr')}</p><div class="qr-code-text">${createData.payment.qr_code}</div></div></div>
+                <div class="qr-code-area"><div id="qrCodeCanvas"></div></div>
                 <div class="payment-method-label"><span class="alipay-icon">💙</span> ${t('alipay')}</div>
+                <p class="payment-note">${t('scan_qr')}</p>
               </div>
               <div class="payment-info">
                 <h3>${t('order_info')}</h3>
                 <div class="payment-detail-row"><span>${t('order_no')}</span><strong>${orderNo}</strong></div>
                 <div class="payment-detail-row"><span>${t('payment_amount')}</span><strong class="payment-amount">${currency}${createData.payment.total_amount}</strong></div>
                 <div class="payment-detail-row"><span>${t('payment_status')}</span><span class="badge-pending">${t('waiting_payment')}</span></div>
-                <p class="payment-note">${t('scan_qr')}</p>
                 <button class="btn btn-full" onclick="checkPaymentStatus('${orderNo}')">${t('pay_now')} - ${currency}${createData.payment.total_amount}</button>
               </div>
             </div>
           </div>`;
+        generateQRCode('qrCodeCanvas', createData.payment.qr_code);
         window._paymentCheckInterval = setInterval(() => checkPaymentStatus(orderNo), 5000);
         return;
       }
@@ -724,6 +725,31 @@ function initContactForm() {
     showToast(t('toast_contact'));
     e.target.reset();
   });
+}
+
+// --- QR Code Generation ---
+function generateQRCode(containerId, text) {
+  try {
+    if (typeof qrcode !== 'undefined') {
+      const qr = qrcode(0, 'M');
+      qr.addData(text);
+      qr.make();
+      const container = document.getElementById(containerId);
+      if (container) {
+        container.innerHTML = qr.createSvgTag({ cellSize: 4, margin: 4 });
+        const svg = container.querySelector('svg');
+        if (svg) {
+          svg.style.width = '220px';
+          svg.style.height = '220px';
+        }
+      }
+    } else {
+      const container = document.getElementById(containerId);
+      if (container) container.innerHTML = `<div class="qr-fallback"><p>📱</p><a href="${text}" target="_blank" style="font-size:0.75rem;word-break:break-all">${text}</a></div>`;
+    }
+  } catch (e) {
+    console.error('QR generation failed:', e);
+  }
 }
 
 function showToast(msg) {
