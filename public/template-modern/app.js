@@ -239,6 +239,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initContactForm();
   initCheckoutForm();
   initHashRouting();
+  loadCustomPagesNav();
 });
 
 // --- Hash Routing ---
@@ -258,6 +259,7 @@ function handleRoute() {
   document.getElementById('view-product').style.display = 'none';
   document.getElementById('view-checkout').style.display = 'none';
   document.getElementById('view-payment').style.display = 'none';
+  document.getElementById('view-page').style.display = 'none';
 
   if (view === 'product' && param) {
     document.getElementById('view-product').style.display = 'block';
@@ -268,6 +270,9 @@ function handleRoute() {
   } else if (view === 'payment' && param) {
     document.getElementById('view-payment').style.display = 'block';
     loadPaymentPage(param);
+  } else if (view === 'page' && param) {
+    document.getElementById('view-page').style.display = 'block';
+    loadCustomPage(param);
   } else {
     document.getElementById('view-home').style.display = 'block';
   }
@@ -830,6 +835,36 @@ function initContactForm() {
     showToast(t('toast_contact'));
     e.target.reset();
   });
+}
+
+// --- Custom Pages ---
+async function loadCustomPagesNav() {
+  try {
+    const res = await fetch('/api/pages');
+    const data = await res.json();
+    const pages = data.pages || [];
+    const nav = document.getElementById('customPagesNav');
+    if (pages.length && nav) {
+      nav.innerHTML = pages.map(p => `<a href="#page/${p.slug}">${p.title}</a>`).join(' ');
+    }
+  } catch {}
+}
+
+async function loadCustomPage(slug) {
+  const container = document.getElementById('customPageContent');
+  container.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
+  try {
+    const res = await fetch('/api/pages');
+    const data = await res.json();
+    const page = (data.pages || []).find(p => p.slug === slug);
+    if (page) {
+      container.innerHTML = `<div class="page-article"><h1 class="page-article-title">${page.title}</h1><div class="page-article-body">${page.body}</div></div>`;
+    } else {
+      container.innerHTML = '<p style="text-align:center;color:var(--text-muted)">Page not found.</p>';
+    }
+  } catch {
+    container.innerHTML = '<p>Failed to load page.</p>';
+  }
 }
 
 // --- QR Code Generation ---
